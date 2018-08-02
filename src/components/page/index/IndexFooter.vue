@@ -1,37 +1,84 @@
 <template>
-  <mt-tabbar v-model="selected">
-    <mt-tab-item id="tab1">
-      <router-link :to="{name:'home'}">
-        <img slot="icon" src="assets/100x100.png">
-        首页
-      </router-link>
-    </mt-tab-item>
-    <mt-tab-item id="tab2">
-      <router-link :to="{name:'linger'}">
-        <img slot="icon" src="assets/100x100.png">
-        逗留
-      </router-link>
-    </mt-tab-item>
-    <mt-tab-item id="tab3">
-      <router-link :to="{name:'mine'}">
-        <img slot="icon" src="assets/100x100.png">
-        我的
-      </router-link>
-    </mt-tab-item>
-  </mt-tabbar>
+    <div class="footer-container">
+        <router-link @click.native="setTitle(item.title)" v-for="item in tablist" :to="item.toObj" class="footer-item" active-class="app-active-class" id="item.id" :key="item.id">
+            <img class="footer-icon" :src="item.iconPath">
+            <span>{{item.title}}</span>
+        </router-link>
+    </div>
 </template>
 
 <script>
-  export default {
-    name: "IndexFooter",
-    methods:{
-      selected(){
-
-      }
+    import home from '$src/components/page/index/home_selected.png'
+    import linger from '$src/components/page/index/smile_selected.png'
+    import mine from '$src/components/page/index/mine_selected.png'
+    export default {
+        name: "IndexFooter",
+        data(){
+            return{
+               tablist:[
+                   {
+                       id:1,
+                       toObj:{name:'home'},
+                       iconPath:home,
+                       title:'首页'
+                   },
+                   {
+                       id:2,
+                       toObj:{name:'linger'},
+                       iconPath:linger,
+                       title:'逗留'
+                   },
+                   {
+                       id:3,
+                       toObj:{name:'mine'},
+                       iconPath:mine,
+                       title:'我的'
+                   }
+               ] 
+            }
+        },
+        methods: {
+            setTitle(title){
+                this.$store.commit({
+                    type:'setTitle',
+                    title:title
+                })
+            }
+        }
     }
-  }
 </script>
 
 <style scoped>
+    .footer-container {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 46px;
+        box-sizing: border-box;
+        display: flex;
+        width: 100%;
+        border-top:1px solid gray;
+    }
 
+    .footer-item {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .footer-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .app-active-class{
+        background-color: lightblue;
+    }
+
+    a:-webkit-any-link {
+        cursor: auto;
+        text-decoration: none;
+    }
 </style>

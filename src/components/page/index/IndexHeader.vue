@@ -1,10 +1,15 @@
 <template>
-  <mt-header fixed title="fixed top"></mt-header>
+  <mt-header fixed :title="title"></mt-header>
 </template>
 
 <script>
     export default {
-        name: "IndexHeader"
+        name: "IndexHeader",
+        computed:{
+            title(){
+                return this.$store.state.title
+            }
+        }
     }
 </script>
 

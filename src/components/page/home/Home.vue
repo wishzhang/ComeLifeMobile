@@ -1,7 +1,6 @@
 <template>
     <div>
-      home
-      <img src="100x100.png" width="100" height="100"/>
+      home2
     </div>
 </template>
 
