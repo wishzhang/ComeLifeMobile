@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="container-y">
         <IndexHeader></IndexHeader>
-        <router-view id="index-content"></router-view>
+        <router-view class="index index-content"></router-view>
         <IndexFooter></IndexFooter>
     </div>
 </template>
@@ -20,7 +20,7 @@
 </script>
 
 <style scoped>
-    #index-content {
-        margin-top: 40px;
+    .index-content {
+        margin-bottom: 46px;
     }
 </style>

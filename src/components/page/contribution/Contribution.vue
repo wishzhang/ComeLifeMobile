@@ -8,19 +8,18 @@
                     <div class="item-content">{{item.jokeContent}}</div>
                     <div class="item-footer">
                         <span>{{item.publishTime}}</span>
-                        <img class="item-favorite" v-if="item.isFavorite" src="./favorite_selected.png" alt="">
-                        <img class="item-favorite" v-else src="./favorite_unselected.png" alt="">
                     </div>
                 </div>
             </div>
             <div class="item-line"/>
         </div>
+        <img class="add-img" src="./contribution_add.png" alt="" @click="toContributionAdd">
     </div>
 </template>
 
 <script>
     export default {
-        name: "Home",
+        name: "Contribution",
         data() {
             return {
                 lists: [
@@ -47,20 +46,23 @@
             this.fetchData()
         },
         methods: {
+            toContributionAdd() {
+                this.$router.push({name: 'contributionAdd'})
+            },
             fetchData() {
-                var _this=this;
+                var _this = this;
                 this.request.post('/allUserJoke')
                     .then(function (response) {
-                        var data=response.data;
-                        var d=_this.dataHandler(data);
+                        var data = response.data;
+                        var d = _this.dataHandler(data);
                         console.log(d);
-                        _this.lists=d;
+                        _this.lists = d;
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
-            dataHandler: function(data) { //响应的对象
+            dataHandler: function (data) { //响应的对象
                 var users = data.data;
                 var arr = [];
                 for (var i = 0; i < users.length; i++) {
@@ -68,7 +70,7 @@
                     var r = user.jokes;
                     for (var j = 0; j < r.length; j++) {
                         var joke = r[j];
-                        joke.uid=user.uid;
+                        joke.uid = user.uid;
                         joke.nickName = user.nickName;
                         joke.gender = user.gender;
                         joke.city = user.city;
@@ -139,5 +141,15 @@
     .item-favorite {
         width: 20px;
         height: 20px;
+    }
+
+    .add-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        position: fixed;
+        right: 20px;
+        bottom: 30px;
+        background-color: blue;
     }
 </style>

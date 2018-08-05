@@ -50,7 +50,7 @@
 
 <style scoped>
     .footer-container {
-        position: absolute;
+        position: fixed;
         left: 0;
         bottom: 0;
         height: 46px;
@@ -58,6 +58,8 @@
         display: flex;
         width: 100%;
         border-top:1px solid gray;
+        z-index:1000;
+        background-color: white;
     }
 
     .footer-item {

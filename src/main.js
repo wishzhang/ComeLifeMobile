@@ -6,9 +6,22 @@ import router from '$src/router/index'
 import store from '$src/store/index'
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css'
+import '$src/assets/css/common.css'
+import axios from 'axios'
+import global from '$src/global'
+import util from '$src/utils/util'
 
 Vue.use(Mint);
 
+
+Vue.prototype.request = axios.create({
+    //baseURL: 'https://www.zhangw.xyz',
+    baseURL:'http://localhost:3000',
+    timeout: 5000,
+    headers: {}
+});
+Vue.prototype.global=global
+Vue.prototype.util=util
 
 Vue.config.productionTip = false
 
