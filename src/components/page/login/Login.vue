@@ -39,11 +39,11 @@
                         var r=res.data;
                         if(r.code===0){
                             _this.global.isLogin=true;
-                            _this.global.userData=r.data;
+                            _this.global.userData=r.data[0];
 
                             _this.util.storage.setObj(_this.util.storage.key.LOGIN,{
                                 username:_this.util.guid(),
-                                user_id:r.data._id
+                                user_id:r.data[0]._id
                             });
                             _this.$router.go(-1);
                             _this.$toast('登录成功')

@@ -6,7 +6,8 @@ Vue.use(Vuex)
 const store=new Vuex.Store({
     state:{
         count:0,
-        title:'首页'
+        title:'首页',
+        isLogin:false
     },
     mutations:{
         increment(state){
@@ -14,7 +15,11 @@ const store=new Vuex.Store({
         },
         setTitle(state,navbar){
             state.title=navbar.title
+        },
+        setLogin(state,flag){
+            state.isLogin=flag
         }
+
     }
 })
 

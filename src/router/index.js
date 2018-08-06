@@ -9,6 +9,10 @@ import Login from '$src/components/page/login/Login.vue'
 import IndexBack from '$src/components/page/indexBack/IndexBack.vue'
 import Contribution from '$src/components/page/contribution/Contribution.vue'
 import ContributionAdd from '$src/components/page/contribution/ContributionAdd.vue'
+import Collection from '$src/components/page/collection/Collection.vue'
+import Setting from '$src/components/page/setting/Setting.vue'
+import Advice from '$src/components/page/advice/Advice.vue'
+import Talk from '$src/components/page/talk/talk.vue'
 
 Vue.use(Router)
 
@@ -44,6 +48,31 @@ export default new Router({
                     name:'contributionAdd',
                     path:'contributionAdd',
                     component:ContributionAdd
+                },
+                {
+                    name:'collection',
+                    path:'collection',
+                    component:Collection
+                },
+                {
+                    name:'setting',
+                    path:'setting',
+                    component:Setting
+                },
+                {
+                    name:'setting',
+                    path:'setting',
+                    component:Setting
+                },
+                {
+                    name:'advice',
+                    path:'advice',
+                    component:Advice
+                },
+                {
+                    name:'talk',
+                    path:'talk',
+                    component:Talk
                 }
             ]
         },

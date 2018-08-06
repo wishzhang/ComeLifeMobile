@@ -1,48 +1,45 @@
 <template>
     <div class="container-y">
-        <div class="container-y" v-for="item in lists" :key="item._id">
-            <div class="container-x app-content-padding">
-                <img :src="item.avatarUrl" alt="" class="avatar">
-                <div class="container-y container-item">
-                    <div class="item-name">{{item.nickName}}</div>
-                    <div class="item-content">{{item.jokeContent}}</div>
-                    <div class="item-footer">
-                        <span>{{item.publishTime}}</span>
+        <div v-if="isNormal">
+            <div class="container-y" v-for="item in lists" :key="item._id">
+                <div class="container-x app-content-padding">
+                    <img :src="item.avatarUrl" alt="" class="avatar">
+                    <div class="container-y container-item">
+                        <div class="item-name">{{item.username}}</div>
+                        <div class="item-content">{{item.jokeContent}}</div>
+                        <div class="item-footer">
+                            <span>{{item.publishTime}}</span>
+                        </div>
                     </div>
                 </div>
+                <div class="item-line"/>
             </div>
-            <div class="item-line"/>
         </div>
-        <img class="add-img" src="./contribution_add.png" alt="" @click="toContributionAdd">
+        <div class="error" v-else>
+            <img src="../../../assets/img/error.png" alt="">
+            <div class="error-text">{{errorMsg}}</div>
+        </div>
+        <div class="container-img">
+            <img class="add-img" src="./contribution_add.png" alt="" @click="toContributionAdd">
+        </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "Contribution",
+        name: "Collection",
         data() {
             return {
-                lists: [
-                    {
-                        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/MYtxJxbyx3I69u2t8MicHyuiaYH90el1ZFcreXJaokUBmGxOXZU6UmCyync7EvQce07l10StTasENeHemG5D03pg/132",
-                        city: "Huizhou",
-                        collectors: ["5b53496619ec245e3833f7e7"],
-                        country: "China",
-                        gender: 1,
-                        isFavorite: false,
-                        jokeContent: "科技",
-                        nickName: "仰望星空",
-                        owner: "5b53496619ec245e3833f7e7",
-                        province: "Guangdong",
-                        publishTime: "2018-07-28 13:53",
-                        uid: undefined,
-                        __v: 1,
-                        _id: "5b5c04c9d21b090346ebd6b2"
-                    }
-                ]
+                errorMsg: '',
+                isNormal: true,
+                lists: []
             }
         },
         created() {
+            this.$store.commit({
+                type: 'setTitle',
+                title: '我的投稿'
+            })
             this.fetchData()
         },
         methods: {
@@ -51,14 +48,30 @@
             },
             fetchData() {
                 var _this = this;
-                this.request.post('/allUserJoke')
+                var s = this.util.storage
+                var loginMsg = s.getObj(s.key.LOGIN)
+                this.request.post('/login', loginMsg)
                     .then(function (response) {
-                        var data = response.data;
-                        var d = _this.dataHandler(data);
-                        console.log(d);
-                        _this.lists = d;
+                        var r = response.data;
+                        if (r.code === 0) {
+                            if (r.data.length !== 0) {
+                                var d = _this.dataHandler(r);
+                                _this.lists = d;
+                                _this.isNormal = true;
+                            } else {
+                                _this.isNormal = false;
+                                _this.errorMsg = '空空如也~';
+                            }
+
+                        } else {
+                            _this.isNormal = false;
+                            _this.errorMsg = '数据加载出错~';
+                        }
+
                     })
                     .catch(function (error) {
+                        _this.isNormal = false;
+                        _this.errorMsg = '数据加载出错~';
                         console.log(error);
                     });
             },
@@ -71,7 +84,7 @@
                     for (var j = 0; j < r.length; j++) {
                         var joke = r[j];
                         joke.uid = user.uid;
-                        joke.nickName = user.nickName;
+                        joke.username = user.username;
                         joke.gender = user.gender;
                         joke.city = user.city;
                         joke.province = user.province;
@@ -89,6 +102,8 @@
                         arr.push(joke);
                     }
                 }
+                arr.sort(this.util.compare('publishTime'))
+                arr = this.util.jokesConvertTime(arr);
                 return arr;
             },
         }
@@ -144,12 +159,32 @@
     }
 
     .add-img {
-        width: 40px;
-        height: 40px;
-        border-radius: 20px;
-        position: fixed;
-        right: 20px;
+        width: 30px;
+        height: 30px;
+    }
+
+    /*err*/
+    .error {
+        width: 100%;
+        position: absolute;
+        top: 25%;
+        text-align: center;
+    }
+
+    .error-text {
+        margin-top: 10px;
+    }
+
+    .container-img{
+        width:50px;
+        height:50px;
+        border-radius: 25px;
+        position:fixed;
         bottom: 30px;
+        right:20px;
         background-color: blue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

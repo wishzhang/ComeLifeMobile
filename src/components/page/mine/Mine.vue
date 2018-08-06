@@ -16,14 +16,14 @@
                 <span class="item-text">我的收藏</span>
             </div>
 
-            <div class="item app-content-padding">
+            <div class="item app-content-padding" @click="toSetting">
                 <img class="item-img" src="./setting.png" alt="">
                 <span class="item-text">我的设置</span>
             </div>
 
-            <div class="item app-content-padding">
+            <div class="item app-content-padding" @click="toAdvice">
                 <img class="item-img" src="./feedback.png" alt="">
-                <span class="item-text">投诉与建议</span>
+                <span class="item-text">反馈与建议</span>
             </div>
         </div>
     </div>
@@ -32,6 +32,12 @@
 <script>
     export default {
         name: "Mine",
+        created(){
+            this.$store.commit({
+                type:'setTitle',
+                title:'我的'
+            })
+        },
         methods:{
             toContribution(){
                 if(this.global.isLogin){
@@ -42,7 +48,21 @@
             },
             toCollection(){
                 if(this.global.isLogin){
-                    this.$toast('go in');
+                    this.$router.push({name:'collection'})
+                }else{
+                    this.$router.push({name:'login'})
+                }
+            },
+            toSetting(){
+                if(this.global.isLogin){
+                    this.$router.push({name:'setting'})
+                }else{
+                    this.$router.push({name:'login'})
+                }
+            },
+            toAdvice(){
+                if(this.global.isLogin){
+                    this.$router.push({name:'advice'})
                 }else{
                     this.$router.push({name:'login'})
                 }
@@ -83,7 +103,6 @@
     .item-img {
         width: 18px;
         height: 18px;
-        border-radius: 9px;
         margin-right: 5px;
     }
 

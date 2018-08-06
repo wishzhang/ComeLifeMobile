@@ -9,7 +9,7 @@
                         <div class="item-content">{{item.jokeContent}}</div>
                         <div class="item-footer">
                             <span>{{item.publishTime}}</span>
-                            <div v-if="isLogin">
+                            <div>
                                 <img class="item-favorite" v-if="item.isFavorite" src="./favorite_selected.png" alt=""
                                      @click="favoriteDel(item,index)">
                                 <img class="item-favorite" v-else src="./favorite_unselected.png" alt=""
@@ -29,52 +29,48 @@
 </template>
 
 <script>
-    //TODO:得到isLogin的状态后，更新isFavorite,不然点击收藏会报错
-
+    //TODO:得到isLogin的状态后，更新isFavorite
     export default {
-        name: "Home",
+        name: "Collection",
         data() {
             return {
-                isNormal:true,
-                errorMsg:'',
-                isLogin: false,
-                lists: []
+                errorMsg: '',
+                isNormal: true,
+                lists: [],
             }
         },
         created() {
+            this.$store.commit({
+                type:'setTitle',
+                title:'我的收藏'
+            })
             this.fetchData()
-            if (!this.global.isLogin) {
-                this.autoLogin()
-            } else {
-                this.isLogin = true;
-            }
         },
         methods: {
             fetchData() {
                 var _this = this;
-                this.request.post('/allUserJoke')
+                var s = this.util.storage;
+                var loginMsg = s.getObj(s.key.LOGIN);
+                this.request.post('/getUserCollections', loginMsg)
                     .then(function (response) {
                         var r = response.data;
-                        if(r.code===0){
-                            if(r.data.length!==0){
+                        if (r.code === 0) {
+                            if (r.data.length !== 0) {
                                 var d = _this.dataHandler(r);
                                 _this.lists = d;
-                                _this.isNormal=true;
-                            }else{
-                                _this.isNormal=false;
-                                _this.errorMsg='空空如也~'
+                            } else {
+                                _this.isNormal = false;
+                                _this.errorMsg = '空空如也~'
                             }
-
-                        }else{
-                            _this.isNormal=false;
-                            _this.errorMsg='数据加载出错~'
+                        } else {
+                            _this.isNormal = false;
+                            _this.errorMsg = '数据加载错误'
                         }
-
                     })
                     .catch(function (error) {
+                        _this.isNormal = false;
+                        _this.errorMsg = '数据加载错误'
                         console.log(error);
-                        _this.isNormal=false;
-                        _this.errorMsg='数据加载出错~'
                     });
             },
             dataHandler: function (data) { //响应的对象
@@ -83,31 +79,32 @@
                 var arr = [];
                 for (var i = 0; i < users.length; i++) {
                     var user = users[i];
-                    var r = user.jokes;
+                    var r = user.collections;
                     for (var j = 0; j < r.length; j++) {
-                        var joke = r[j];
-                        joke.uid = user._id;
-                        joke.nickName = user.nickName;
-                        joke.gender = user.gender;
-                        joke.city = user.city;
-                        joke.province = user.province;
-                        joke.country = user.country;
-                        joke.avatarUrl = user.avatarUrl;
-                        joke.isFavorite = false;
-                        var collector = joke.collectors;
-                        var userMsg = _this.util.storage.getObj(_this.util.storage.key.LOGIN);
-                        var user_id = userMsg && userMsg.user_id;
+                        var c = r[j];
+                        c.nickName = user.username;
+                        c.gender = user.gender;
+                        c.city = user.city;
+                        c.province = user.province;
+                        c.country = user.country;
+                        c.avatarUrl = user.avatarUrl;
+                        c.isFavorite = false;
+                        var collector = c.collectors;
+                        var user_id = _this.util.storage.getObj(_this.util.storage.key.LOGIN).user_id;
                         for (var k = 0; k < collector.length; k++) {
                             if (user_id === collector[k]) {
-                                joke.isFavorite = true;
+                                c.isFavorite = true;
                                 break;
                             }
                         }
-                        arr.push(joke);
+                        arr.sort(_this.util.compare('publishTime'))
+                        arr = this.util.jokesConvertTime(arr);
+                        arr.push(c);
                     }
                 }
                 return arr;
             },
+            //前置条件，用户已登录才可是用该功能
             favoriteAdd(item, index) {
                 var joke_id = item._id;
                 var s = this.util.storage;
@@ -127,7 +124,6 @@
                     })
                     .catch(function (err) {
                         _this.$toast('添加失败~')
-                        console.log(err);
                     })
             },
             favoriteDel(item, index) {
@@ -148,34 +144,8 @@
                         }
                     })
                     .catch(function (err) {
-                        console.log(err)
                         _this.$toast('移除失败~')
                     })
-            },
-            autoLogin() {
-                var _this = this;
-                var s = this.util.storage
-                var loginMsg = s.getObj(s.key.LOGIN)
-                console.log('loginMsg...:' + JSON.stringify(loginMsg))
-                if (loginMsg) {
-                    this.request.post('/login', loginMsg)
-                        .then(function (res) {
-                            var r = res.data;
-                            if (r.code === 0) {
-                                _this.global.isLogin = true;
-                                _this.global.userData = r.data[0];
-                                _this.isLogin = true;
-                                console.log('autoLogin success')
-                            } else {
-                                console.log('autoLogin failed:msg error');
-                            }
-                        })
-                        .catch(function (err) {
-                            console.log(err)
-                        })
-                } else {
-                    console.log('autoLogin failed:no login msg');
-                }
             }
         }
     }
@@ -228,15 +198,4 @@
         width: 20px;
         height: 20px;
     }
-    /*err*/
-    .error{
-        width: 100%;
-        position: absolute;
-        top:25%;
-        text-align: center;
-    }
-    .error-text{
-        margin-top:10px;
-    }
-
 </style>
