@@ -15,8 +15,8 @@ Vue.use(Mint);
 
 
 Vue.prototype.request = axios.create({
-    //baseURL: 'https://www.zhangw.xyz',
-    baseURL:'http://192.168.1.101:3000',
+    baseURL: 'https://www.zhangw.xyz',
+    //baseURL:'http://192.168.1.101:3000',
     timeout: 5000,
     headers: {}
 });
