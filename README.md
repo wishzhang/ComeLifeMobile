@@ -1,23 +1,64 @@
+# 项目说明
+Web移动端——荧幕星光
+
 ## 项目展示
-[http://www.zhangw.xyz:4000](http://www.zhangw.xyz:4000 "http://www.zhangw.xyz:4000")
+<a href="http://www.zhangw.xyz:4000">荧幕星光Web移动端</a>
 
 ## 主要技术
-> vue+vue-router+vuex+axios+mint-ui+webpack
-
-## 项目结构
+**vue+mint-ui+webpack**
 
 ## 功能模块
-- 首页：段子列表
-- 逗留：句子迷列表
-- 我的
-	- 我的投稿
 
-		- 我的投稿列表
-		- 投稿
-	- 我的收藏
-		- 收藏列表
-	- 我的设置
-		- 退出登录
+- **主页**：用户查看所有已发布的段子。
 
-	- 反馈与建议
-		- 提交建议
+- **我的**：展示用户头像，用户名，我的投稿，我的收藏，我的设置，投诉与建议。
+
+- **我的投稿**（审核不通过）：用戶自身投稿的段子的歷史記錄，显示段子內容和投稿時間。
+	- **浏览我的投稿**。
+	- **投稿**。
+
+- **逗留**：展示言语，轨迹，不懂，青果，功能入口，并以列表形式展示句子迷。
+
+- **青果** (审核不通过)：实现日记，周记，月记。
+	- **日记**。
+	- **周记**。
+	- **月记**。
+- **言语**：与机器人聊天。
+
+- **我的收藏**：收藏段子。
+
+	- **添加收藏**。
+	- **移除收藏**。
+
+- **反馈与建议**：用户提交文本，邮箱信息。
+- **注册**。
+- **登录**。
+
+
+
+
+## 软件控制
+- **硬件**：以iPhone6作为视觉稿标准。
+
+- **需求**：
+	- **理念**：一个有温度的程序，和你一起积极面对生活。问合理的问题（如关注优点)。
+
+## Issues
+Please make sure to read the guidelines before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+
+**Bug**  
+
+- Issue title.
+- Steps to reproduce.
+- What is expected?
+- What is actually happening?
+- Any additional comments?(optional)
+
+**Feature**
+
+- Issue title.
+- What problem does this feature solve?
+## Lisence
+<a href="https://opensource.org/licenses/MIT">MIT</a>
+
+Copyright (c) 2018-present,Wang Zhang
